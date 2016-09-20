@@ -5,7 +5,7 @@
   <description>This extension ensures that the nickname field is always populated. The nickname will default to the contact's first name, but can be overriden with user input.</description>
   <license>AGPL-3.0</license>
   <maintainer>
-    <author>Frank J. Gómez & Dan O'Brien, Ginkgo Street Labs</author>
+    <author>Frank J. Gómez and Dan O'Brien, Ginkgo Street Labs</author>
     <email>inquire@ginkgostreet.com</email>
   </maintainer>
   <urls>
