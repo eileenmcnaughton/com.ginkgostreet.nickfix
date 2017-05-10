@@ -2,7 +2,12 @@
 <extension key="com.ginkgostreet.nickfix" type="module">
   <file>nickfix</file>
   <name>Nickname Fixer</name>
-  <description>This extension ensures that the nickname field is always populated. The nickname will default to the contact's first name, but can be overriden with user input.</description>
+  <description>
+    This extension ensures that the nickname field is always populated. The
+    nickname will default to the contact's first name, but can be overriden with
+    user input. NOTE: Installing this extension will immediately populate the
+    nickname for any contact which doesn't already have one.
+  </description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>Frank J. Gómez and Dan O'Brien, Ginkgo Street Labs</author>
