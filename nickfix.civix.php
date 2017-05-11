@@ -19,14 +19,14 @@ function _nickfix_civix_civicrm_config(&$config = NULL) {
   $extRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;
   $extDir = $extRoot . 'templates';
 
-  if ( is_array( $template->template_dir ) ) {
-      array_unshift( $template->template_dir, $extDir );
+  if (is_array($template->template_dir)) {
+    array_unshift($template->template_dir, $extDir);
   }
   else {
-      $template->template_dir = array( $extDir, $template->template_dir );
+    $template->template_dir = array($extDir, $template->template_dir);
   }
 
-  $include_path = $extRoot . PATH_SEPARATOR . get_include_path( );
+  $include_path = $extRoot . PATH_SEPARATOR . get_include_path();
   set_include_path($include_path);
 }
 
@@ -52,6 +52,20 @@ function _nickfix_civix_civicrm_install() {
   _nickfix_civix_civicrm_config();
   if ($upgrader = _nickfix_civix_upgrader()) {
     $upgrader->onInstall();
+  }
+}
+
+/**
+ * Implements hook_civicrm_postInstall().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_postInstall
+ */
+function _nickfix_civix_civicrm_postInstall() {
+  _nickfix_civix_civicrm_config();
+  if ($upgrader = _nickfix_civix_upgrader()) {
+    if (is_callable(array($upgrader, 'onPostInstall'))) {
+      $upgrader->onPostInstall();
+    }
   }
 }
 
@@ -117,7 +131,7 @@ function _nickfix_civix_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
  * @return CRM_Nickfix_Upgrader
  */
 function _nickfix_civix_upgrader() {
-  if (!file_exists(__DIR__.'/CRM/Nickfix/Upgrader.php')) {
+  if (!file_exists(__DIR__ . '/CRM/Nickfix/Upgrader.php')) {
     return NULL;
   }
   else {
@@ -153,7 +167,8 @@ function _nickfix_civix_find_files($dir, $pattern) {
       while (FALSE !== ($entry = readdir($dh))) {
         $path = $subdir . DIRECTORY_SEPARATOR . $entry;
         if ($entry{0} == '.') {
-        } elseif (is_dir($path)) {
+        }
+        elseif (is_dir($path)) {
           $todos[] = $path;
         }
       }
@@ -175,9 +190,12 @@ function _nickfix_civix_civicrm_managed(&$entities) {
     $es = include $file;
     foreach ($es as $e) {
       if (empty($e['module'])) {
-        $e['module'] = 'org.leadercenter.nickfix';
+        $e['module'] = 'com.ginkgostreet.nickfix';
       }
       $entities[] = $e;
+      if (empty($e['params']['version'])) {
+        $e['params']['version'] = '3';
+      }
     }
   }
 }
@@ -204,7 +222,7 @@ function _nickfix_civix_civicrm_caseTypes(&$caseTypes) {
       // throw new CRM_Core_Exception($errorMessage);
     }
     $caseTypes[$name] = array(
-      'module' => 'org.leadercenter.nickfix',
+      'module' => 'com.ginkgostreet.nickfix',
       'name' => $name,
       'file' => $file,
     );
@@ -230,7 +248,7 @@ function _nickfix_civix_civicrm_angularModules(&$angularModules) {
     $name = preg_replace(':\.ang\.php$:', '', basename($file));
     $module = include $file;
     if (empty($module['ext'])) {
-      $module['ext'] = 'org.leadercenter.nickfix';
+      $module['ext'] = 'com.ginkgostreet.nickfix';
     }
     $angularModules[$name] = $module;
   }
@@ -273,12 +291,14 @@ function _nickfix_civix_insert_navigation_menu(&$menu, $path, $item) {
   }
   else {
     // Find an recurse into the next level down
-    $found = false;
+    $found = FALSE;
     $path = explode('/', $path);
     $first = array_shift($path);
     foreach ($menu as $key => &$entry) {
       if ($entry['attributes']['name'] == $first) {
-        if (!$entry['child']) $entry['child'] = array();
+        if (!isset($entry['child'])) {
+          $entry['child'] = array();
+        }
         $found = _nickfix_civix_insert_navigation_menu($entry['child'], implode('/', $path), $item, $key);
       }
     }
@@ -305,7 +325,7 @@ function _nickfix_civix_fixNavigationMenu(&$nodes) {
     if ($key === 'navID') {
       $maxNavID = max($maxNavID, $item);
     }
-    });
+  });
   _nickfix_civix_fixNavigationMenuItems($nodes, $maxNavID, NULL);
 }
 
@@ -342,7 +362,7 @@ function _nickfix_civix_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   $configured = TRUE;
 
   $settingsDir = __DIR__ . DIRECTORY_SEPARATOR . 'settings';
-  if(is_dir($settingsDir) && !in_array($settingsDir, $metaDataFolders)) {
+  if (is_dir($settingsDir) && !in_array($settingsDir, $metaDataFolders)) {
     $metaDataFolders[] = $settingsDir;
   }
 }
