@@ -10,7 +10,7 @@
   </description>
   <license>AGPL-3.0</license>
   <maintainer>
-    <author>Frank J. Gómez and Dan O'Brien, Ginkgo Street Labs</author>
+    <author>Dan O'Brien, Ginkgo Street Labs; Seeking maintainer;</author>
     <email>inquire@ginkgostreet.com</email>
   </maintainer>
   <urls>
@@ -19,7 +19,7 @@
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
   <releaseDate>2017-05-10</releaseDate>
-  <version>1.0</version>
+  <version>1.1</version>
   <develStage>stable</develStage>
   <compatibility>
     <ver>4.4</ver>
